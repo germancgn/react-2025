@@ -39,6 +39,13 @@ class Search extends Component<SearchProps, SearchState> {
           placeholder="Search Star Wars characters..."
         />
         <button onClick={this.handleSearch}>Search</button>
+        <button
+          onClick={() => {
+            throw new Error('Test Error');
+          }}
+        >
+          Throw Error
+        </button>
       </div>
     );
   }
@@ -109,12 +116,8 @@ export default class App extends Component<unknown, AppState> {
         }
         return response.json();
       })
-      .then((data) =>
-        this.setState({ results: data.results, loading: false, page })
-      )
-      .catch((error) =>
-        this.setState({ error: error.message, loading: false })
-      );
+      .then((data) => this.setState({ results: data.results, loading: false, page }))
+      .catch((error) => this.setState({ error: error.message, loading: false }));
   };
 
   handlePageChange = (newPage: number) => {
@@ -133,16 +136,11 @@ export default class App extends Component<unknown, AppState> {
           <Search onSearch={(term) => this.fetchResults(term, 1)} />
           <SearchResults {...this.state} />
           <div>
-            <button
-              disabled={this.state.page === 1}
-              onClick={() => this.handlePageChange(this.state.page - 1)}
-            >
+            <button disabled={this.state.page === 1} onClick={() => this.handlePageChange(this.state.page - 1)}>
               Previous
             </button>
             <span> Page {this.state.page} </span>
-            <button onClick={() => this.handlePageChange(this.state.page + 1)}>
-              Next
-            </button>
+            <button onClick={() => this.handlePageChange(this.state.page + 1)}>Next</button>
           </div>
         </div>
       </ErrorBoundary>
